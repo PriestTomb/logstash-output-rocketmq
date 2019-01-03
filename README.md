@@ -2,6 +2,8 @@
 
 LogStash output 插件的 Rocketmq 版
 
+[README](https://github.com/PriestTomb/logstash-output-rocketmq/blob/master/README_en.md)
+
 ## 说明
 
 本人对 LogStash、Rocketmq、Ruby 都不是很熟，因为目前官方和民间暂时没找到有 Rocketmq 版的 output 插件，**这仅仅是为了工作需求临时参考学习写的一个基本 Demo**，所以连插件的 Rspec 测试文件都没写，分享出来仅供参考，如需实际应用，可重写核心代码
