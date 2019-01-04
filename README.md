@@ -1,38 +1,40 @@
 # logstash-output-rocketmq
 
-LogStash output 插件的 Rocketmq 版
+LogStash plugin output to Rocketmq
 
-## 说明
+[中文说明](https://github.com/PriestTomb/logstash-output-rocketmq/blob/master/README_zh.md)
 
-本人对 LogStash、Rocketmq、Ruby 都不是很熟，因为目前官方和民间暂时没找到有 Rocketmq 版的 output 插件，**这仅仅是为了工作需求临时参考学习写的一个基本 Demo**，所以连插件的 Rspec 测试文件都没写，分享出来仅供参考，如需实际应用，可重写核心代码
+## Description
 
-参考学习了 LogStash 的部分官方/非官方插件源码：[logstash-output-kafka](https://github.com/logstash-plugins/logstash-output-kafka)、[logstash-output-rabbitmq](https://github.com/logstash-plugins/logstash-output-rabbitmq)、[logstash-output-jdbc](https://github.com/theangryangel/logstash-output-jdbc)
+I am not skilled in LogStash, Rocketmq and Ruby, just because there are no official or third-party rocketmq output plugin found on the web. **This is just a demo written for work needs**, so the Rspec file is not written. Share the code for reference only, if you want to use it, please rewrite the core code.
 
-## 版本
+Learned the source code of some LogStash output plugins: [logstash-output-kafka](https://github.com/logstash-plugins/logstash-output-kafka), [logstash-output-rabbitmq](https://github.com/logstash-plugins/logstash-output-rabbitmq), [logstash-output-jdbc](https://github.com/theangryangel/logstash-output-jdbc)
 
-Demo 版基于 LogStash v6.4 和 Rocketmq Client v4.2 实现，其余版本未知
+## Versions
 
-## 安装
+This demo is based on LogStash v6.4 and Rocketmq Client v4.2, other versions are not clear.
 
-0. 将 logstash-output-rocketmq-0.1.0.gem 放到 LogStash 的安装目录下
+## Installation
 
-1. 在 LogStash 的安装目录下执行 `bin/logstash-plugin install logstash-output-rocketmq-0.1.0.gem`
+0. Put logstash-output-rocketmq-0.1.0.gem in the installation directory of LogStash
 
-2. 将 rocketmq_jar 中的 jar 文件放到 LogStash 安装目录下的 /vendor/jar/rocketmq 中
+1. Run `bin/logstash-plugin install logstash-output-rocketmq-0.1.0.gem` in the installation directory of LogStash
 
-## 配置参数
+2. Place the jar file in rocketmq_jar in /vendor/jar/rocketmq in the installation directory of LogStash
 
-|参数|类型|描述|是否必需|默认值|
+## Configurations
+
+|Option|Type|Description|Required?|Default|
 |---|---|---|---|---|
-|logstash_path|String|本地 Logstash 的路径，如 C:/ELK/logstash、/usr/local/logstash|是||
-|name_server_addr|String|Rocketmq 的 NameServer 地址，如 192.168.10.10:5678|是||
-|producer_group|String|Rocketmq 的 producer group|否|defaultProducerGroup|
-|topic|String|Message 的 topic|是||
-|tag|String|Message 的 tag|否|defaultTag|
-|retry_times|Number|发送异常后的重试次数|否|2|
+|logstash_path|String|The installation directory of LogStash, e.g. C:/ELK/logstash, /usr/local/logstash|Yes||
+|name_server_addr|String|Rocketmq's NameServer address, e.g. 192.168.10.10:5678|Yes||
+|producer_group|String|Rocketmq's producer group|No|defaultProducerGroup|
+|topic|String|Message's topic|Yes||
+|tag|String|Message's tag|No|defaultTag|
+|retry_times|Number|Number of retries after failed delivery|No|2|
 
-## 重写编译
+## Rewrite & Rebuild
 
-核心文件仅为 [rocketmq.rb](https://github.com/PriestTomb/logstash-output-rocketmq/blob/master/lib/logstash/outputs/rocketmq.rb)，如果有修改，可重新使用 `gem build logstash-output-rocketmq.gemspec` 编译，后重新安装
+The core file is [rocketmq.rb](https://github.com/PriestTomb/logstash-output-rocketmq/blob/master/lib/logstash/outputs/rocketmq.rb), if you have modified this file, you can run `gem build logstash-output-rocketmq.gemspec` to rebuild the gem file, then re-install.
 
-如果仅少量修改测试，可直接在 LogStash 下安装好的插件内修改该文件（路径为/vendor/local_gems/xxxxxx），修改后重启 LogStash 即可
+But if only a small amount of modification is in order to test, you can modify this file directly in the plugin installed under LogStash (plugin path is /vendor/local_gems/xxxxxx), restart LogStash after modification.
