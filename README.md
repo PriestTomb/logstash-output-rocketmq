@@ -16,16 +16,20 @@ This demo is based on LogStash v6.4 and Rocketmq Client v4.2, other versions are
 
 ## Installation
 
-0. Place the jar file in rocketmq_jar in /vendor/jar/rocketmq in the installation directory of LogStash
+* If the installation environment has internet (Refer to [LogStash output plugin test installation](https://www.elastic.co/guide/en/logstash/current/_how_to_write_a_logstash_output_plugin.html#_test_installation_4))
 
-1. If the installation environment has internet (Refer to [LogStash output plugin test installation](https://www.elastic.co/guide/en/logstash/current/_how_to_write_a_logstash_output_plugin.html#_test_installation_4))
+  * Place the jar file in rocketmq_jar in /vendor/jar/rocketmq in the installation directory of LogStash
 
   * Put logstash-output-rocketmq-0.1.0.gem in the installation directory of LogStash
+
   * Run `bin/logstash-plugin install logstash-output-rocketmq-0.1.0.gem` in the installation directory of LogStash
 
-2. If the installation environment dose not have internet (Refer to [LogStash installing offline plugin packs](https://www.elastic.co/guide/en/logstash/current/offline-plugins.html#installing-offline-packs))
+* If the installation environment dose not have internet (Refer to [LogStash installing offline plugin packs](https://www.elastic.co/guide/en/logstash/current/offline-plugins.html#installing-offline-packs))
+
+  * Place the jar file in rocketmq_jar in /vendor/jar/rocketmq in the installation directory of LogStash
 
   * Put logstash-offline-plugins-6.4.0.zip in the installation directory of LogStash
+
   * Run `bin/logstash-plugin install file:///path/to/logstash-offline-plugins-6.4.0.zip` in the installation directory of LogStash
 
 ## Configurations

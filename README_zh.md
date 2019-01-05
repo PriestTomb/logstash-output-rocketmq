@@ -16,15 +16,15 @@ Demo 版基于 LogStash v6.4 和 Rocketmq Client v4.2 实现，其余版本未�
 
 ## 安装
 
-0. 将 rocketmq_jar 中的 jar 文件放到 LogStash 安装目录下的 /vendor/jar/rocketmq 中
+* 如果安装环境有网络（参考[ LogStash 插件测试安装](https://www.elastic.co/guide/en/logstash/current/_how_to_write_a_logstash_output_plugin.html#_test_installation_4)）
 
-1. 如果安装环境有网络（参考[ LogStash 插件测试安装](https://www.elastic.co/guide/en/logstash/current/_how_to_write_a_logstash_output_plugin.html#_test_installation_4)）
-
+  * 将 rocketmq_jar 中的 jar 文件放到 LogStash 安装目录下的 /vendor/jar/rocketmq 中
   * 将 logstash-output-rocketmq-0.1.0.gem 放到 LogStash 的安装目录下
   * 在 LogStash 的安装目录下执行 `bin/logstash-plugin install logstash-output-rocketmq-0.1.0.gem`
 
-2. 如果安装环境无网络（参考[ LogStash 插件离线安装](https://www.elastic.co/guide/en/logstash/current/offline-plugins.html#installing-offline-packs)）
+* 如果安装环境无网络（参考[ LogStash 插件离线安装](https://www.elastic.co/guide/en/logstash/current/offline-plugins.html#installing-offline-packs)）
 
+  * 将 rocketmq_jar 中的 jar 文件放到 LogStash 安装目录下的 /vendor/jar/rocketmq 中
   * 将 logstash-offline-plugins-6.4.0.zip 放到 LogStash 的安装目录下
   * 在 LogStash 的安装目录下执行 `bin/logstash-plugin install file:///path/to/logstash-offline-plugins-6.4.0.zip`
 
