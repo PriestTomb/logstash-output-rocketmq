@@ -16,11 +16,17 @@ Demo 版基于 LogStash v6.4 和 Rocketmq Client v4.2 实现，其余版本未�
 
 ## 安装
 
-0. 将 logstash-output-rocketmq-0.1.0.gem 放到 LogStash 的安装目录下
+0. 将 rocketmq_jar 中的 jar 文件放到 LogStash 安装目录下的 /vendor/jar/rocketmq 中
 
-1. 在 LogStash 的安装目录下执行 `bin/logstash-plugin install logstash-output-rocketmq-0.1.0.gem`
+1. 如果安装环境有网络（参考[ LogStash 插件测试安装](https://www.elastic.co/guide/en/logstash/current/_how_to_write_a_logstash_output_plugin.html#_test_installation_4)）
 
-2. 将 rocketmq_jar 中的 jar 文件放到 LogStash 安装目录下的 /vendor/jar/rocketmq 中
+  * 将 logstash-output-rocketmq-0.1.0.gem 放到 LogStash 的安装目录下
+  * 在 LogStash 的安装目录下执行 `bin/logstash-plugin install logstash-output-rocketmq-0.1.0.gem`
+
+2. 如果安装环境无网络（参考[ LogStash 插件离线安装](https://www.elastic.co/guide/en/logstash/current/offline-plugins.html#installing-offline-packs)）
+
+  * 将 logstash-offline-plugins-6.4.0.zip 放到 LogStash 的安装目录下
+  * 在 LogStash 的安装目录下执行 `bin/logstash-plugin install file:///path/to/logstash-offline-plugins-6.4.0.zip`
 
 ## 配置参数
 
@@ -35,6 +41,4 @@ Demo 版基于 LogStash v6.4 和 Rocketmq Client v4.2 实现，其余版本未�
 
 ## 重写编译
 
-核心文件仅为 [rocketmq.rb](https://github.com/PriestTomb/logstash-output-rocketmq/blob/master/lib/logstash/outputs/rocketmq.rb)，如果有修改，可重新使用 `gem build logstash-output-rocketmq.gemspec` 编译，后重新安装
-
-如果仅少量修改测试，可直接在 LogStash 下安装好的插件内修改该文件（路径为/vendor/local_gems/xxxxxx），修改后重启 LogStash 即可
+插件的核心文件仅为 [rocketmq.rb](https://github.com/PriestTomb/logstash-output-rocketmq/blob/master/lib/logstash/outputs/rocketmq.rb)，如果有修改，可重新使用 `gem build logstash-output-rocketmq.gemspec` 编译 gem 文件，或使用 `bin/logstash-plugin prepare-offline-pack logstash-output-rocketmq` 打包离线插件包（参考[ LogStash 打包离线插件包](https://www.elastic.co/guide/en/logstash/current/offline-plugins.html#building-offline-packs)）
