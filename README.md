@@ -14,6 +14,22 @@ Learned the source code of some LogStash output plugins: [logstash-output-kafka]
 
 This demo is based on LogStash v6.4 and Rocketmq Client v4.2, other versions are not clear.
 
+## Change Log
+
+#### [v0.1.1] 2019-01-19
+
+* adds a configuration option `key`.
+
+* adds `concurrency :shared` configuration for plugin, otherwise, the event cannot be processed concurrently.
+
+* fixes a bug about event object cast to byte arrays occasionally caused the plugin to crash.
+
+* fixes a bug about `retry_times`.
+
+#### [v0.1.0] 2019-01-03
+
+* just a demo that can run.
+
 ## Installation
 
 * If the installation environment has internet (Refer to [LogStash output plugin test installation](https://www.elastic.co/guide/en/logstash/current/_how_to_write_a_logstash_output_plugin.html#_test_installation_4))
@@ -41,6 +57,7 @@ This demo is based on LogStash v6.4 and Rocketmq Client v4.2, other versions are
 |producer_group|String|Rocketmq's producer group|No|defaultProducerGroup|
 |topic|String|Message's topic|Yes||
 |tag|String|Message's tag|No|defaultTag|
+|key|String|Message's key|No|defaultKey|
 |retry_times|Number|Number of retries after failed delivery|No|2|
 
 ## Rewrite & Rebuild

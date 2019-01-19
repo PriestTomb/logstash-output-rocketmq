@@ -7,6 +7,9 @@ require "java"
 # 将 Rocketmq 官方客户端依赖 jar 包放 LogStash 根目录下的 /vendor/jar/rocketmq 目录中即可
 class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
 
+  # 设置插件可多线程并发执行
+  concurrency :shared
+
   config_name "rocketmq"
 
   # 本地 Logstash 的路径，必需，如 C:/ELK/logstash、/usr/local/logstash
@@ -24,6 +27,9 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
   # Message 的 tag
   config :tag, :validate => :string, :default => "defaultTag"
 
+  # Message 的 key
+  config :key, :validate => :string, :default => "defaultKey"
+
   # 发送异常后的重试次数，默认 2 次
   config :retry_times, :validate => :number, :default => 2
 
@@ -39,6 +45,7 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
   end
 
   def multi_receive(events)
+    return if events.empty?
     events.each do |event|
       retrying_send(event)
     end
@@ -59,17 +66,15 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
   end
 
   def retrying_send(event)
-    message_to_send = event
-
-    # 配置 message 对象
-    @mq_message = org.apache.rocketmq.common.message.Message.new
-    @mq_message.setTopic(topic)
-    @mq_message.setTags(tag)
-    @mq_message.setBody("#{message_to_send}".bytes)
-
-    sent_times = 1
+    sent_times = 0
 
     begin
+      # 配置 message 对象
+      @mq_message = org.apache.rocketmq.common.message.Message.new
+      @mq_message.setTopic(topic)
+      @mq_message.setTags(tag)
+      @mq_message.setKeys(key)
+      @mq_message.setBody("#{event}".bytes)
       result = @producer.send(@mq_message)
 
       if result.nil?
@@ -90,7 +95,7 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
         retry
       else
         # 根据实际需求处理没发送成功的消息
-        puts "Message send failed: #{message_to_send}"
+        puts "Message send failed: #{event}"
       end
     end
   end

@@ -14,6 +14,22 @@ LogStash output 插件的 Rocketmq 版
 
 Demo 版基于 LogStash v6.4 和 Rocketmq Client v4.2 实现，其余版本未知
 
+## 更新日志
+
+#### [v0.1.1] 2019-01-19
+
+* 新增配置参数 `key`，即 Rocketmq Message 对象的 key 参数
+
+* 补充插件的 `concurrency :shared` 设置，否则不能多 workers 并发处理消息
+
+* 修复 event 对象转 byte 数组时偶尔会崩溃的 bug
+
+* 修复重试次数有误的 bug
+
+#### [v0.1.0] 2019-01-03
+
+* 仅仅是一个能跑的 Demo 版
+
 ## 安装
 
 * 如果安装环境有网络（参考[ LogStash 插件测试安装](https://www.elastic.co/guide/en/logstash/current/_how_to_write_a_logstash_output_plugin.html#_test_installation_4)）
@@ -37,6 +53,7 @@ Demo 版基于 LogStash v6.4 和 Rocketmq Client v4.2 实现，其余版本未�
 |producer_group|String|Rocketmq 的 producer group|否|defaultProducerGroup|
 |topic|String|Message 的 topic|是||
 |tag|String|Message 的 tag|否|defaultTag|
+|key|String|Message 的 key|否|defaultKey|
 |retry_times|Number|发送异常后的重试次数|否|2|
 
 ## 重写编译
