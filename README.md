@@ -16,6 +16,10 @@ This demo is based on LogStash v6.4 and Rocketmq Client v4.2, other versions are
 
 ## Change Log
 
+#### [v0.1.2] 2019-01-20
+
+* fixes a bug about Ruby instance variable.
+
 #### [v0.1.1] 2019-01-19
 
 * adds a configuration option `key`.

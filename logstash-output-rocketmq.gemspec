@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name          = 'logstash-output-rocketmq'
-  s.version       = '0.1.1'
+  s.version       = '0.1.2'
   s.licenses      = ['MIT']
   s.summary       = "Rocketmq plugin demo"
   s.description   = "This gem is a Logstash plugin required to be installed on top of the Logstash core pipeline using $LS_HOME/bin/logstash-plugin install gemname. This gem is not a stand-alone program"
