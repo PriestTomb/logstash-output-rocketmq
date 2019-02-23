@@ -16,6 +16,12 @@ Demo 版基于 LogStash v6.4 和 Rocketmq Client v4.2 实现，其余版本未�
 
 ## 更新日志
 
+#### [v0.1.3] 2019-02-23
+
+* 引入 codec 插件，调整 `multi_receive` 方法为 `multi_receive_encoded` 方法，使 rocketmq 插件可配置 codec 插件，对接收的消息进行自定义格式化
+
+* 修复消息中有中文时，Ruby 的 byte 数组转换成 Java 的 byte 数组会出现越界异常的 bug
+
 #### [v0.1.2] 2019-01-20
 
 * 修复 message 对象被定义为实例变量在多线程下会出现 `the message body is null` 报错的 bug
@@ -59,6 +65,7 @@ Demo 版基于 LogStash v6.4 和 Rocketmq Client v4.2 实现，其余版本未�
 |tag|String|Message 的 tag|否|defaultTag|
 |key|String|Message 的 key|否|defaultKey|
 |retry_times|Number|发送异常后的重试次数|否|2|
+|codec|Object|Logstash 的 codec 插件配置|否|plain|
 
 ## 重写编译
 

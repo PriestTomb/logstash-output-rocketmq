@@ -16,6 +16,12 @@ This demo is based on LogStash v6.4 and Rocketmq Client v4.2, other versions are
 
 ## Change Log
 
+#### [v0.1.3] 2019-02-23
+
+* add codec plugin, method `multi_receive` is modified into method `multi_receive_encoded`, so that the rocketmq plugin can configure the codec plugin to formatting the received event.
+
+* fixes a bug about `RangeError: too big for byte` error occurs when Ruby's byte array is converted to Java's byte array.(This bug is currently known when there is Chinese in the event.)
+
 #### [v0.1.2] 2019-01-20
 
 * fixes a bug about Ruby instance variable.
@@ -63,6 +69,7 @@ This demo is based on LogStash v6.4 and Rocketmq Client v4.2, other versions are
 |tag|String|Message's tag|No|defaultTag|
 |key|String|Message's key|No|defaultKey|
 |retry_times|Number|Number of retries after failed delivery|No|2|
+|codec|Object|codec plugin config|No|plain|
 
 ## Rewrite & Rebuild
 
