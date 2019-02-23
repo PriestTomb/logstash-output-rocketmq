@@ -12,6 +12,9 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
 
   config_name "rocketmq"
 
+  # 使用 codec，可使用 codec 配置进行相关格式化
+  default :codec, "plain"
+
   # 本地 Logstash 的路径，必需，如 C:/ELK/logstash、/usr/local/logstash
   config :logstash_path, :validate => :string, :required => true
 
@@ -44,10 +47,11 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
     @producer.start
   end
 
-  def multi_receive(events)
-    return if events.empty?
-    events.each do |event|
-      retrying_send(event)
+  # 如配置 codec ，则 data 为格式化后的数据
+  # 不配置 codec 时 data 和 event 一致
+  def multi_receive_encoded(events_and_data)
+    events_and_data.each do |event, data|
+      retrying_send(event, data)
     end
   end
 
@@ -65,7 +69,7 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
     end
   end
 
-  def retrying_send(event)
+  def retrying_send(event, data)
     sent_times = 0
 
     begin
@@ -74,7 +78,9 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
       mq_message.setTopic(topic)
       mq_message.setTags(tag)
       mq_message.setKeys(key)
-      mq_message.setBody("#{event}".bytes)
+      # 使用 Java 的 String.getBytes 方法代替 Ruby 的 bytes 方法，否则中文会报错
+      java_msg_str = java.lang.String.new(data)
+      mq_message.setBody(java_msg_str.getBytes(org.apache.rocketmq.remoting.common.RemotingHelper::DEFAULT_CHARSET))
       result = @producer.send(mq_message)
 
       if result.nil?
@@ -95,7 +101,7 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
         retry
       else
         # 根据实际需求处理没发送成功的消息
-        puts "Message send failed: #{event}"
+        puts "Message send failed: #{data}"
       end
     end
   end
