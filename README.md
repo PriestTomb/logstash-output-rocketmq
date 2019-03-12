@@ -72,8 +72,13 @@ update 2019-03-12 : Tested on the latest version of Logstash v6.6 can also be su
 |name_server_addr|String|Rocketmq's NameServer address, e.g. 192.168.10.10:5678|Yes||
 |producer_group|String|Rocketmq's producer group|No|defaultProducerGroup|
 |topic|String|Message's topic|Yes||
+|topic_format|boolean|is topic need to use formatting|No|false|
 |tag|String|Message's tag|No|defaultTag|
+|tag_format|boolean|is tag need to use formatting|No|false|
 |key|String|Message's key|No|defaultKey|
+|key_format|boolean|is key need to use formatting|No|false|
+|body|String|Message's body|No||
+|body_format|boolean|is body need to use formatting|No|false|
 |retry_times|Number|Number of retries after failed delivery|No|2|
 |codec|Object|codec plugin config|No|plain|
 
