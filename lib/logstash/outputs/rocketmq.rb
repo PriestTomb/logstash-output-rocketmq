@@ -5,6 +5,12 @@ require "java"
 
 # Rocketmq 版 LogStash Output 插件，根据 Rocketmq v4.2 开发，实现方式较为简陋
 # 将 Rocketmq 官方客户端依赖 jar 包放 LogStash 根目录下的 /vendor/jar/rocketmq 目录中即可
+#
+# 关于字段格式化：
+# Rocketmq Message 相关的属性，topic、tag、key、body 都支持格式化
+# 如 @body_format 为 true 时代表开启 @body 需要格式化，则 @body 最好为 "%{xxx}" 的格式
+# 这样，@body 会被格式化成 event 对象中 xxx 对应的值，例如指定 @body="%{message}"
+# 则发送的消息体就是采集到的内容，而不必包括 Logstash 添加的 @timestamp、host 等无用信息
 class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
 
   # 设置插件可多线程并发执行
@@ -27,16 +33,33 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
   # Message 的 topic，必需
   config :topic, :validate => :string, :required => true
 
+  # topic 是否需要格式化，默认值 false
+  config :topic_format, :validate => :boolean, :default => false
+
   # Message 的 tag
   config :tag, :validate => :string, :default => "defaultTag"
 
+  # tag 是否需要格式化，默认值 false
+  config :tag_format, :validate => :boolean, :default => false
+
   # Message 的 key
   config :key, :validate => :string, :default => "defaultKey"
+
+  # key 是否需要格式化，默认值 false
+  config :key_format, :validate => :boolean, :default => false
+
+  # Message 的 body
+  config :body, :validate => :string
+
+  # body 是否需要格式化，默认值 false，发送 codec 插件格式化后的结果
+  config :body_format, :validate => :boolean, :default => false
 
   # 发送异常后的重试次数，默认 2 次
   config :retry_times, :validate => :number, :default => 2
 
   def register
+    validate_format
+
     load_jar_files
 
     @stopping = Concurrent::AtomicBoolean.new(false)
@@ -75,12 +98,21 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
     begin
       # 配置 message 对象
       mq_message = org.apache.rocketmq.common.message.Message.new
+
+      # 根据配置，对 message 对象的各属性进行处理，格式化或取原值
+      topic = @topic_format ? event.sprintf(@topic) : @topic
       mq_message.setTopic(topic)
+
+      tag = @tag_format ? event.sprintf(@tag) : @tag
       mq_message.setTags(tag)
+      
+      key = @key_format ? event.sprintf(@key) : @key
       mq_message.setKeys(key)
+
+      body = @body_format ? event.sprintf(@body) : data
       # 使用 Java 的 String.getBytes 方法代替 Ruby 的 bytes 方法，否则中文会报错
-      java_msg_str = java.lang.String.new(data)
-      mq_message.setBody(java_msg_str.getBytes(org.apache.rocketmq.remoting.common.RemotingHelper::DEFAULT_CHARSET))
+      java_body = java.lang.String.new(body)
+      mq_message.setBody(java_body.getBytes(org.apache.rocketmq.remoting.common.RemotingHelper::DEFAULT_CHARSET))
       result = @producer.send(mq_message)
 
       if result.nil?
@@ -101,8 +133,14 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
         retry
       else
         # 根据实际需求处理没发送成功的消息
-        puts "Message send failed: #{data}"
+        @logger.info("Message send failed: #{data}")
       end
+    end
+  end
+
+  def validate_format
+    if @body_format and @body.nil?
+      raise "body must be set if body_format is true"
     end
   end
 
