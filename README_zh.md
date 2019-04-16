@@ -18,6 +18,10 @@ update 2019-03-12 : 测试过目前最新的 Logstash v6.6，也能正常安装�
 
 ## 更新日志
 
+#### [v0.1.5] 2019-04-16
+
+* 新增配置参数 `use_vip_channel`，即是否使用 Rocketmq 的 vip channel 。否则服务端不开启 vip channel 时，客户端（默认开启该配置）会出现 `connect to <xxx：10909> failed` 的异常
+
 #### [v0.1.4] 2019-03-12
 
 * 新增、调整配置参数，使 Rocketmq Message 对象的 `topic`、`tag`、`key`、`body` 属性均可配置自定义格式化，关于格式化的详细说明，可参考 [Logstash 配置文件示例及说明](https://github.com/PriestTomb/logstash-output-rocketmq/blob/master/example/README.md)
@@ -51,8 +55,8 @@ update 2019-03-12 : 测试过目前最新的 Logstash v6.6，也能正常安装�
 * 如果安装环境有网络（参考[ Logstash 插件测试安装](https://www.elastic.co/guide/en/logstash/current/_how_to_write_a_logstash_output_plugin.html#_test_installation_4)）
 
   * 将 rocketmq_jar 中的 jar 文件放到 Logstash 安装目录下的 /vendor/jar/rocketmq 中
-  * 将 logstash-output-rocketmq-0.1.0.gem 放到 Logstash 的安装目录下
-  * 在 Logstash 的安装目录下执行 `bin/logstash-plugin install logstash-output-rocketmq-0.1.0.gem`
+  * 将 logstash-output-rocketmq-x.x.x.gem 放到 Logstash 的安装目录下
+  * 在 Logstash 的安装目录下执行 `bin/logstash-plugin install logstash-output-rocketmq-x.x.x.gem`
 
 * 如果安装环境无网络（参考[ Logstash 插件离线安装](https://www.elastic.co/guide/en/logstash/current/offline-plugins.html#installing-offline-packs)）
 
@@ -67,6 +71,7 @@ update 2019-03-12 : 测试过目前最新的 Logstash v6.6，也能正常安装�
 |logstash_path|String|本地 Logstash 的路径，如 C:/ELK/logstash、/usr/local/logstash|是||
 |name_server_addr|String|Rocketmq 的 NameServer 地址，如 192.168.10.10:5678|是||
 |producer_group|String|Rocketmq 的 producer group|否|defaultProducerGroup|
+|use_vip_channel|boolean|Rocketmq 是否使用 VIPChannel|否|false|
 |topic|String|Message 的 topic|是||
 |topic_format|boolean|topic 是否需要格式化|否|false|
 |tag|String|Message 的 tag|否|defaultTag|

@@ -18,13 +18,17 @@ update 2019-03-12 : Tested on the latest version of Logstash v6.6 can also be su
 
 ## Change Log
 
+#### [v0.1.5] 2019-04-16
+
+* adds a configuration option `use_vip_channel`, which means if use Rocketmq's vip channel, otherwise, when the server does not open vip channel, the client with this configuration enabled by default will have an exception of `connect to <xxx:10909> failed`
+
 #### [v0.1.4] 2019-03-12
 
-* add and mod configurations, the `topic`,`tag`,`key`,`body` attributes of the Message object can be formatted, for an example of formatting, you can refer to [Logstash configuration file example and description](https://github.com/PriestTomb/logstash-output-rocketmq/blob/master/example/README.md) (sorry, this document is only available in Chinese)
+* adds and modified configurations, the `topic`,`tag`,`key`,`body` attributes of the Message object can be formatted, for an example of formatting, you can refer to [Logstash configuration file example and description](https://github.com/PriestTomb/logstash-output-rocketmq/blob/master/example/README.md) (sorry, this document is only available in Chinese)
 
 #### [v0.1.3] 2019-02-23
 
-* add codec plugin, method `multi_receive` is modified into method `multi_receive_encoded`, so that the rocketmq plugin can configure the codec plugin to formatting the received event.
+* adds codec plugin, method `multi_receive` is modified into method `multi_receive_encoded`, so that the rocketmq plugin can configure the codec plugin to formatting the received event.
 
 * fixes a bug about `RangeError: too big for byte` error occurs when Ruby's byte array is converted to Java's byte array.(This bug is currently known when there is Chinese in the event.)
 
@@ -52,9 +56,9 @@ update 2019-03-12 : Tested on the latest version of Logstash v6.6 can also be su
 
   * Place the jar file in rocketmq_jar in /vendor/jar/rocketmq in the installation directory of Logstash
 
-  * Put logstash-output-rocketmq-0.1.0.gem in the installation directory of Logstash
+  * Put logstash-output-rocketmq-x.x.x.gem in the installation directory of Logstash
 
-  * Run `bin/logstash-plugin install logstash-output-rocketmq-0.1.0.gem` in the installation directory of Logstash
+  * Run `bin/logstash-plugin install logstash-output-rocketmq-x.x.x.gem` in the installation directory of Logstash
 
 * If the installation environment dose not have internet (Refer to [Logstash installing offline plugin packs](https://www.elastic.co/guide/en/logstash/current/offline-plugins.html#installing-offline-packs))
 
@@ -71,6 +75,7 @@ update 2019-03-12 : Tested on the latest version of Logstash v6.6 can also be su
 |logstash_path|String|The installation directory of Logstash, e.g. C:/ELK/logstash, /usr/local/logstash|Yes||
 |name_server_addr|String|Rocketmq's NameServer address, e.g. 192.168.10.10:5678|Yes||
 |producer_group|String|Rocketmq's producer group|No|defaultProducerGroup|
+|use_vip_channel|boolean|if Rocketmq use VIP channel|No|false|
 |topic|String|Message's topic|Yes||
 |topic_format|boolean|is topic need to use formatting|No|false|
 |tag|String|Message's tag|No|defaultTag|
