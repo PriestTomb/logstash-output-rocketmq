@@ -30,6 +30,9 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
   # Rocketmq 的 producer group
   config :producer_group, :validate => :string, :default => "defaultProducerGroup"
 
+  # Rocketmq 是否使用 VIPChannel，默认值 false
+  config :use_vip_channel, :validate => :boolean, :default => false
+
   # Message 的 topic，必需
   config :topic, :validate => :string, :required => true
 
@@ -67,6 +70,7 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
     # 创建生产者对象
     @producer = org.apache.rocketmq.client.producer.DefaultMQProducer.new(producer_group)
     @producer.setNamesrvAddr(name_server_addr)
+    @producer.setVipChannelEnabled(use_vip_channel)
     @producer.start
   end
 
@@ -105,7 +109,7 @@ class LogStash::Outputs::Rocketmq < LogStash::Outputs::Base
 
       tag = @tag_format ? event.sprintf(@tag) : @tag
       mq_message.setTags(tag)
-      
+
       key = @key_format ? event.sprintf(@key) : @key
       mq_message.setKeys(key)
 
